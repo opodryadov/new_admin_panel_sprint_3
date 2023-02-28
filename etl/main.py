@@ -49,7 +49,7 @@ if __name__ == '__main__':
                 loader.load(data)
                 state.set_state('modified', datetime.datetime.now().isoformat())
 
-                logger.info(f'The new row loaded: {data}')
+                logger.info('The new row loaded: %s', data)
 
         conn.close()
-        time.sleep(300)
+        time.sleep(float(os.environ.get('INTERVAL')))

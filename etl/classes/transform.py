@@ -8,7 +8,7 @@ class DataTransform:
     """
 
     @staticmethod
-    def get_roles(list_of_persons: list[dict], roles: list) -> dict:
+    def get_roles(list_of_persons: list[dict], roles: tuple) -> dict:
         persons_by_role = {}
         for role in roles:
             persons = [{
@@ -24,7 +24,7 @@ class DataTransform:
     @backoff()
     def transform(self, film_works: list[dict]) -> list[FilmworkSchema]:
         es_film_works = []
-        roles = ['director', 'actor', 'writer']
+        roles = ('director', 'actor', 'writer')
 
         for film_work in film_works:
             film_persons = self.get_roles(film_work['persons'], roles)
