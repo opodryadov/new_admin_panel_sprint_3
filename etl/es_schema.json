@@ -64,7 +64,20 @@
 			},
 			"genre":
 			{
-				"type": "keyword"
+				"type": "nested",
+				"dynamic": "strict",
+				"properties":
+				{
+					"id":
+					{
+						"type": "keyword"
+					},
+					"name":
+					{
+						"type": "text",
+						"analyzer": "ru_en"
+					}
+				}
 			},
 			"title":
 			{
@@ -83,29 +96,17 @@
 				"type": "text",
 				"analyzer": "ru_en"
 			},
-			"director":
-			{
-				"type": "nested",
-				"dynamic": "strict",
-				"properties":
-				{
-					"id":
-					{
-						"type": "keyword"
-					},
-					"name":
-					{
-						"type": "text",
-						"analyzer": "ru_en"
-					}
-				}
-			},
 			"actors_names":
 			{
 				"type": "text",
 				"analyzer": "ru_en"
 			},
 			"writers_names":
+			{
+				"type": "text",
+				"analyzer": "ru_en"
+			},
+			"directors_names":
 			{
 				"type": "text",
 				"analyzer": "ru_en"
@@ -128,6 +129,23 @@
 				}
 			},
 			"writers":
+			{
+				"type": "nested",
+				"dynamic": "strict",
+				"properties":
+				{
+					"id":
+					{
+						"type": "keyword"
+					},
+					"name":
+					{
+						"type": "text",
+						"analyzer": "ru_en"
+					}
+				}
+			},
+			"directors":
 			{
 				"type": "nested",
 				"dynamic": "strict",
