@@ -35,6 +35,7 @@ class DataTransform:
                 genre=film_work['genres'],
                 title=film_work['title'],
                 description=film_work['description'],
+                directors_names=film_persons['director'][1],
                 actors_names=film_persons['actor'][1],
                 writers_names=film_persons['writer'][1],
                 directors=film_persons['director'][0],
