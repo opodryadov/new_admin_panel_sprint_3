@@ -5,7 +5,7 @@ import time
 import psycopg2
 from classes import DataTransform, ElasticsearchLoader, PostgresExtractor
 from psycopg2.extras import DictCursor
-from queries import GET_FILM_WORKS_QUERY, GET_PERSONS_QUERY
+from queries import GET_FILM_WORKS_QUERY, GET_PERSONS_QUERY, GET_GENRES_QUERY
 from settings import DSL, ES_HOST, FILE_PATH, INTERVAL
 from storage import JsonFileStorage, State
 
@@ -29,6 +29,7 @@ if __name__ == "__main__":
             index_query = (
                 ("movies", GET_FILM_WORKS_QUERY, (last_modified,) * 3),
                 ("persons", GET_PERSONS_QUERY, (last_modified,)),
+                ("genres", GET_GENRES_QUERY, (last_modified,)),
             )
 
             for index, query, clause in index_query:

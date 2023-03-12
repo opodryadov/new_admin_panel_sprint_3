@@ -31,3 +31,8 @@ GET_PERSONS_QUERY = """
 SELECT id, full_name FROM content.person 
 WHERE updated_at > %s ORDER BY updated_at
 """
+
+GET_GENRES_QUERY = """
+SELECT id, name FROM content.genre 
+WHERE updated_at > %s ORDER BY updated_at
+"""

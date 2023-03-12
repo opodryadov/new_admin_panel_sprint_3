@@ -1,6 +1,6 @@
 from backoff import backoff
 
-from models import FilmworkSchema, PersonSchema
+from models import FilmworkSchema, PersonSchema, GenreSchema
 
 
 class DataTransform:
@@ -63,10 +63,24 @@ class DataTransform:
 
         return es_persons
 
+    def gendata_genres(self, genres: list[list]) -> list[GenreSchema]:
+        es_genres = []
+
+        for genre_data in genres:
+            genre = GenreSchema(
+                id=genre_data[0],
+                name=genre_data[1],
+            )
+
+            es_genres.append(genre)
+
+        return es_genres
+
     def get_gendata_transform(self, index: str, data: list[list]):
         return {
             "movies": self.gendata_film_works,
             "persons": self.gendata_persons,
+            "genres": self.gendata_genres,
         }[index](data)
 
     @backoff()
