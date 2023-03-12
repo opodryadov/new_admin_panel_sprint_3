@@ -10,11 +10,6 @@ class GenreSchema(BaseModel):
 
 class PersonSchema(BaseModel):
     id: str
-    name: str
-
-
-class PersonSchemaOut(BaseModel):
-    id: str
     full_name: str
 
 

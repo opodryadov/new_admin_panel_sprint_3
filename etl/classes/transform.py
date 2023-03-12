@@ -1,6 +1,6 @@
 from backoff import backoff
 
-from models import FilmworkSchema, PersonSchemaOut
+from models import FilmworkSchema, PersonSchema
 
 
 class DataTransform:
@@ -13,12 +13,12 @@ class DataTransform:
         persons_by_role = {}
         for role in roles:
             persons = [
-                {"id": field["person_id"], "name": field["person_name"]}
+                {"id": field["person_id"], "full_name": field["person_name"]}
                 for field in list_of_persons
                 if field["person_role"] == role
             ]
 
-            names = [name["name"] for name in persons]
+            names = [name["full_name"] for name in persons]
             persons_by_role[role] = (persons, names)
 
         return persons_by_role
@@ -50,11 +50,11 @@ class DataTransform:
 
         return es_film_works
 
-    def gendata_persons(self, persons: list[list]) -> list[PersonSchemaOut]:
+    def gendata_persons(self, persons: list[list]) -> list[PersonSchema]:
         es_persons = []
 
         for person_data in persons:
-            person = PersonSchemaOut(
+            person = PersonSchema(
                 id=person_data[0],
                 full_name=person_data[1],
             )
