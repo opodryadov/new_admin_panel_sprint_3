@@ -1,3 +1,4 @@
-from .transform import DataTransform
-from .loader import ElasticsearchLoader
+# flake8: noqa
 from .extractor import PostgresExtractor
+from .loader import ElasticsearchLoader
+from .transform import DataTransform

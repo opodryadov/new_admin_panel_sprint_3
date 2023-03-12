@@ -1,5 +1,6 @@
 from backoff import backoff
-from models import FilmworkSchema
+
+from models import FilmworkSchema, PersonSchemaOut
 
 
 class DataTransform:
@@ -11,38 +12,63 @@ class DataTransform:
     def get_roles(list_of_persons: list[dict], roles: tuple) -> dict:
         persons_by_role = {}
         for role in roles:
-            persons = [{
-                'id': field['person_id'],
-                'name': field['person_name']
-            } for field in list_of_persons if field['person_role'] == role]
+            persons = [
+                {"id": field["person_id"], "name": field["person_name"]}
+                for field in list_of_persons
+                if field["person_role"] == role
+            ]
 
-            names = [name['name'] for name in persons]
+            names = [name["name"] for name in persons]
             persons_by_role[role] = (persons, names)
 
         return persons_by_role
 
-    @backoff()
-    def transform(self, film_works: list[dict]) -> list[FilmworkSchema]:
+    def gendata_film_works(
+        self, film_works: list[dict]
+    ) -> list[FilmworkSchema]:
         es_film_works = []
-        roles = ('director', 'actor', 'writer')
+        roles = ("director", "actor", "writer")
 
         for film_work in film_works:
-            film_persons = self.get_roles(film_work['persons'], roles)
+            film_persons = self.get_roles(film_work["persons"], roles)
 
             film = FilmworkSchema(
-                id=film_work['id'],
-                imdb_rating=film_work['rating'],
-                genre=film_work['genres'],
-                title=film_work['title'],
-                description=film_work['description'],
-                directors_names=film_persons['director'][1],
-                actors_names=film_persons['actor'][1],
-                writers_names=film_persons['writer'][1],
-                directors=film_persons['director'][0],
-                actors=film_persons['actor'][0],
-                writers=film_persons['writer'][0]
+                id=film_work["id"],
+                imdb_rating=film_work["rating"],
+                genre=film_work["genres"],
+                title=film_work["title"],
+                description=film_work["description"],
+                directors_names=film_persons["director"][1],
+                actors_names=film_persons["actor"][1],
+                writers_names=film_persons["writer"][1],
+                directors=film_persons["director"][0],
+                actors=film_persons["actor"][0],
+                writers=film_persons["writer"][0],
             )
 
             es_film_works.append(film)
 
         return es_film_works
+
+    def gendata_persons(self, persons: list[list]) -> list[PersonSchemaOut]:
+        es_persons = []
+
+        for person_data in persons:
+            person = PersonSchemaOut(
+                id=person_data[0],
+                full_name=person_data[1],
+            )
+
+            es_persons.append(person)
+
+        return es_persons
+
+    def get_gendata_transform(self, index: str, data: list[list]):
+        return {
+            "movies": self.gendata_film_works,
+            "persons": self.gendata_persons,
+        }[index](data)
+
+    @backoff()
+    def transform(self, index: str, data: list[list]):
+        return self.get_gendata_transform(index, data)

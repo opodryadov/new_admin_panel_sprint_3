@@ -22,7 +22,7 @@ class JsonFileStorage(BaseStorage):
     def save_state(self, state: dict) -> None:
         data = self.retrieve_state()
         data.update(state)
-        with open(self.file_path, 'w', encoding='utf8') as json_file:
+        with open(self.file_path, "w", encoding="utf8") as json_file:
             json.dump(data, json_file)
 
     def retrieve_state(self) -> dict:

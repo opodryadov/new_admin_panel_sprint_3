@@ -13,6 +13,11 @@ class PersonSchema(BaseModel):
     name: str
 
 
+class PersonSchemaOut(BaseModel):
+    id: str
+    full_name: str
+
+
 class FilmworkSchema(BaseModel):
     id: str
     imdb_rating: Optional[float]
